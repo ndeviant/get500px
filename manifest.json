@@ -1,0 +1,39 @@
+{
+		"manifest_version": 2,
+ 
+		"name": "Get 500px",
+		"description": "This extension will add download button to 500px picture",
+		"author": "Deviant.GQ",
+		"version": "0.1.1",
+ 
+		"browser_action": {
+				"default_icon": "Get500px.png",
+				"default_title": "Get 500px"
+		},
+
+		"icons": {
+				"16": "Get500px_16.png",
+				"32": "Get500px_32.png",
+				"48": "Get500px_64.png",
+				"128": "Get500px_128.png"
+		},
+
+		"commands": {
+			"_execute_browser_action": {
+				"suggested_key": {
+					"default": "Ctrl+Shift+Space",
+					"mac": "MacCtrl+Shift+Space"
+				},
+				"description": "Opens wanted picture"
+			}
+		},
+
+		"permissions": [
+				"activeTab"
+		],
+
+		"background": {
+			"scripts": ["background.js"],
+			"persistent": false
+		}
+}
