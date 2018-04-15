@@ -40,3 +40,29 @@
     padding: 8px;
     opacity: 1;
 }
+
+/* Anauthorized fix line */
+
+.warning-line {
+    position: fixed;
+    min-height: 40px;
+    bottom: 0;
+    right: 0;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: #007b70;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "Nunito";
+    font-size: 16px;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 0.05em;
+    opacity: .5;
+    transition: all .3s;
+}
+
+.warning-line:hover {
+    opacity: .75;
+}

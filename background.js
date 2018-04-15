@@ -17,6 +17,10 @@ function onExtensionClick(tab) {
 			{"code" : functionString}, 
 			function(src) {
 				src = src[0];
+						
+				// Save uncutted src
+				chrome.storage.local.set({"photoSrc": src});
+
 				src = src.slice(0, src.indexOf("?"));
 
 				chrome.tabs.create({ 
@@ -34,8 +38,8 @@ chrome.browserAction.onClicked.addListener(onExtensionClick);
 
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 
-	if(response == "addButton") {
-		chrome.tabs.insertCSS(sender.tab.id, { file: "button.css"});
+	if(response == "injectCSS") {
+		chrome.tabs.insertCSS(sender.tab.id, { file: "injected.css"});
 	}
 
 });

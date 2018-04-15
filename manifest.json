@@ -31,7 +31,8 @@
 		"permissions": [
 			"*://*/*",
 			"tabs",
-			"activeTab"
+			"activeTab",
+			"storage"
 		],
 
 		"background": {
@@ -40,7 +41,7 @@
 		},
 
 		"content_scripts": [{
-			"matches": ["https://500px.com/*/*"],
+			"matches": ["https://500px.com/*/*", "https://drscdn.500px.org/*/*"],
 			"js": ["content_script.js"]
 		}]
 }
