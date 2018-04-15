@@ -1,14 +1,14 @@
 {
 		"manifest_version": 2,
  
-		"name": "Get 500px",
+		"name": "Get500px",
 		"description": "This extension will add download button to 500px picture",
 		"author": "Deviant.GQ",
 		"version": "0.1.1",
  
 		"browser_action": {
 				"default_icon": "images/Get500px.png",
-				"default_title": "Get 500px"
+				"default_title": "Get500px"
 		},
 
 		"icons": {
