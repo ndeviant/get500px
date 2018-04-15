@@ -25,12 +25,18 @@
 }
 
 .overlay:hover .photo_container__open_button, 
-.overlay.logged-out .photo_container__open_button,
-.photo-focus__overlay:hover .photo_container__open_button {
+.overlay.logged-out .photo_container__open_button {
     opacity: 0.8;
     background-color: rgba(0,0,0,0.2);
 }
 
 .overlay .photo_container__open_button svg {
     opacity: 0.8;
+}
+
+/* Focused overlay */
+
+.photo-focus__overlay .photo_container__open_button {
+    padding: 8px;
+    opacity: 1;
 }
