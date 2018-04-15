@@ -1,0 +1,36 @@
+.overlay .photo_container__open_button, 
+.photo-focus__overlay .photo_container__open_button {
+    height: 40px;
+    width: 40px;
+    padding: 5px;
+    position: absolute;
+    top: 15px;
+    right: 70px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 20;
+    opacity: 0;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.overlay .photo_container__open_button:hover,
+.photo-focus__overlay .photo_container__open_button:hover {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    transform: scale(1.2);
+}
+
+.overlay:hover .photo_container__open_button, 
+.overlay.logged-out .photo_container__open_button,
+.photo-focus__overlay:hover .photo_container__open_button {
+    opacity: 0.8;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.overlay .photo_container__open_button svg {
+    opacity: 0.8;
+}
