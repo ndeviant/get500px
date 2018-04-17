@@ -48,6 +48,7 @@
     min-height: 40px;
     bottom: 0;
     right: 0;
+    left: 0;
     padding-left: 30px;
     padding-right: 30px;
     background-color: #007b70;
@@ -59,10 +60,11 @@
     font-weight: 900;
     color: #fff;
     letter-spacing: 0.05em;
+    cursor: default;
     opacity: .5;
     transition: all .3s;
 }
 
 .warning-line:hover {
-    opacity: .75;
+    opacity: 0;
 }

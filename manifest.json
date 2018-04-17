@@ -41,7 +41,8 @@
 		},
 
 		"content_scripts": [{
-			"matches": ["https://500px.com/*/*", "https://drscdn.500px.org/*/*"],
+			"matches": ["https://500px.com/*", "https://drscdn.500px.org/*"],
+			"css": ["injected.css"],
 			"js": ["content_script.js"]
 		}]
 }

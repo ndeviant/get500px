@@ -32,14 +32,3 @@ function onExtensionClick(tab) {
 }
 
 chrome.browserAction.onClicked.addListener(onExtensionClick);
-
-
-// Message listeners
-
-chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
-
-	if(response == "injectCSS") {
-		chrome.tabs.insertCSS(sender.tab.id, { file: "injected.css"});
-	}
-
-});
