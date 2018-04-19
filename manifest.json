@@ -19,6 +19,13 @@
 		},
 
 		"commands": {
+			"toggle-feature-foo": {
+				"suggested_key": {
+					"default": "Ctrl + Down",
+					"mac": "Ctrl + Down"
+				},
+				"description": "Add hotkeys to browser action"
+			},
 			"_execute_browser_action": {
 				"suggested_key": {
 					"default": "Ctrl+Shift+Space",

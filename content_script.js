@@ -40,23 +40,45 @@ if (window.location.href.indexOf("500px.com") != -1) {
 
 } else if (window.location.href.indexOf("drscdn.500px.org") != -1) {
 
-	// If we located to encryted image show the warning
+	// If we located to encryted image show the info line
 
 	chrome.storage.local.get("authWasFailed", function(data) {
 		if (data["authWasFailed"]) {
 
 			chrome.storage.local.set({"authWasFailed": false});
 
+			createCanvas(0.9);
+
 			var fontLink 	= document.createElement('link');
 			fontLink.href = "https://fonts.googleapis.com/css?family=Nunito";
 			fontLink.rel 	= "stylesheet";
 
-			var warningLine				= document.createElement('div');
-			warningLine.className = "warning-line";
-			warningLine.innerHTML = "«Unauthorized» occurred, loaded encrypted photo";
+			var infoLine				= document.createElement('div');
+			infoLine.className = "info-line";
+			infoLine.innerHTML = "«Unauthorized» occurred, loaded compressed photo";
+
 
 			document.body.prepend(fontLink);
-			document.body.append(warningLine);
+			document.body.append(infoLine);
+
+
+			// Create the button, when src of photo is changed
+
+			var photo = document.getElementsByTagName("img")[0];
+
+			onMutated("changed", {
+				targetNode: photo,
+				config: { attributes: true },
+
+				callback: function(mutationsList) {
+					for(var mutation of mutationsList) {
+						if (mutation.attributeName && mutation.attributeName == "src") {
+							createDownloadLink(infoLine);
+						}
+					}
+				}
+			});
+
 		}
 	});
 
@@ -71,6 +93,7 @@ if (window.location.href.indexOf("500px.com") != -1) {
 			window.location.href = data["photoSrc"];
 		});
 	}
+
 
 }
 
@@ -187,4 +210,47 @@ function onMutated(eventName, options) {
 		observer.observe(parentNode, config);
 	}
 
+}
+
+
+function createCanvas(compressionRatio) {
+
+	var image = document.getElementsByTagName("img")[0];
+
+	image.style.width = "auto";
+	image.style.height = "auto";
+
+	var imgCanvas = document.createElement("canvas"),
+	imgContext = imgCanvas.getContext("2d");
+
+	imgCanvas.width = image.naturalWidth;
+	imgCanvas.height = image.naturalHeight;
+
+	imgContext.drawImage(image, 0, 0, image.width, image.height);  
+
+	imgCanvas.toBlob(function(blob) {
+		var url = URL.createObjectURL(blob);
+
+	  image.src = url;
+	  image.style.width = "";
+	  image.style.height = "";
+
+	}, 'image/jpeg', compressionRatio);
+}
+
+
+function createDownloadLink(appendTo, url) {
+	appendTo = (appendTo === undefined) ? document.body : appendTo;
+	url 		 = (url === undefined) ? document.getElementsByTagName("img")[0].src : url;
+
+	var imageNumbers  = window.location.pathname.slice("/photo/".length);
+	imageNumbers			= imageNumbers.slice(0, imageNumbers.indexOf("/"));
+
+	var downloadA  			= document.createElement('a');
+	downloadA.href      = url;
+	downloadA.className = "download-a";
+	downloadA.innerHTML = "Download";
+	downloadA.download  = "stock-photo-" + imageNumbers + ".jpg";
+
+	appendTo.appendChild(downloadA);
 }

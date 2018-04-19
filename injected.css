@@ -43,9 +43,11 @@
 
 /* Anauthorized fix line */
 
-.warning-line {
+.info-line {
     position: fixed;
     min-height: 40px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     bottom: 0;
     right: 0;
     left: 0;
@@ -65,6 +67,26 @@
     transition: all .3s;
 }
 
-.warning-line:hover {
-    opacity: 0;
+.info-line:hover {
+    opacity: 1;
+}
+
+/* Download link */
+
+.download-a {
+    border: 2px solid #fff;
+    border-radius: 10em;
+    display: inline-block;
+    padding: 10px 15px;
+    margin-left: 15px;
+    text-decoration: none;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+    transition: all .2s ease-in;
+}
+
+.download-a:hover {
+    background-color: #fff;
+    color: #007b70;
 }
