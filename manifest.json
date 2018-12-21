@@ -4,7 +4,7 @@
 		"name": "Get500px",
 		"description": "This extension will add download button to 500px picture",
 		"author": "Deviant.GQ",
-		"version": "0.1.1",
+		"version": "0.1.2",
  
 		"browser_action": {
 				"default_icon": "images/Get500px.png",
@@ -48,7 +48,7 @@
 		},
 
 		"content_scripts": [{
-			"matches": ["https://500px.com/*", "https://drscdn.500px.org/*"],
+			"matches": ["https://500px.com/*", "https://*.500px.com/*", "https://drscdn.500px.org/*"],
 			"css": ["injected.css"],
 			"js": ["content_script.js"]
 		}]
