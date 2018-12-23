@@ -84,68 +84,42 @@ if (window.location.href.indexOf("500px.com") !== -1) {
 			});
 		}
 	});
-
+}
 
 
 // Or if we on 500px CDN
 
-} else if (window.location.href.indexOf("drscdn.500px.org") !== -1) {
-
+if (window.location.href.indexOf("drscdn.500px.org") !== -1) {
 	// If we located to encryted image show the info line
 
 	chrome.storage.local.get("authWasFailed", function(data) {
+		// If there was no error
 		if (!data["authWasFailed"]) {
-
-			// If we came to encrypted image
 			var href = window.location.href;
 
-			if (href.indexOf("?user_id") !== -1) {
-				// Make max photo quality
-				href = href.replace("%3D1000", "%3D2000");
-
+			// And we came to encrypted image
+			if (href.indexOf("?") !== -1) {
 				// Save uncutted src
 				chrome.storage.local.set({"photoSrc": href});
 
-				window.location.href = href.slice(0, href.indexOf("?user_id"));
-				return;
+				window.location.href = href.slice(0, href.indexOf("?"));
 			}
+
+			addDownloadLine("");
 
 			return;
 		}
 
 		chrome.storage.local.set({"authWasFailed": false});
 
-		createCanvas(0.9);
-
-		addFont();
-
-		var infoLine = addInfoLine({
-			text: "«Unauthorized» occurred, loaded compressed photo",
-		});
-
-		// Create the button, when src of photo is changed
-
-		var photo = document.getElementsByTagName("img")[0];
-
-		onMutated("changed", {
-			targetNode: photo,
-			config: { attributes: true },
-
-			callback: function(mutationsList) {
-				for(var mutation of mutationsList) {
-					if (mutation.attributeName && mutation.attributeName == "src") {
-						createDownloadLink(infoLine.children[0]);
-					}
-				}
-			}
-		});
+		addDownloadLine("«Error» occurred, loaded compressed photo");
 	});
 
 
 	// If there is no image on the page
 	// locate user to encrypted image
 
-	if(!document.getElementsByTagName('img')[0]) {
+	if(!document.querySelector('img')) {
 		chrome.storage.local.set({"authWasFailed": true});
 
 		chrome.storage.local.get("photoSrc", function(data) {
@@ -217,6 +191,21 @@ function addButton() {
 }
 
 
+function addDownloadLine(text) {
+	addFont();
+	var infoLine = addInfoLine({
+		text,
+	});
+
+	var photo = document.querySelector("img");
+	var newPhoto = createCanvas(photo);
+
+	canvasToBlob(newPhoto, { compressionRatio: 0.9 }).then(image => {
+		createDownloadLink(infoLine.children[0]);
+	});
+}
+
+
 function onMutated(eventName, options) { 
 	if (eventName === "changed") {
 		var targetNode = options.targetNode;
@@ -252,12 +241,8 @@ function onMutated(eventName, options) {
 }
 
 
-function createCanvas(compressionRatio) {
-
-	var image = document.getElementsByTagName("img")[0];
-
-	image.style.width = "auto";
-	image.style.height = "auto";
+function createCanvas(image) {
+	var image = document.querySelector("img");
 
 	var imgCanvas = document.createElement("canvas");
 	var imgContext = imgCanvas.getContext("2d");
@@ -265,24 +250,30 @@ function createCanvas(compressionRatio) {
 	imgCanvas.width = image.naturalWidth;
 	imgCanvas.height = image.naturalHeight;
 
-	imgContext.drawImage(image, 0, 0, image.width, image.height);  
+	imgContext.drawImage(image, 0, 0, imgCanvas.width, imgCanvas.height);  
 
-	imgCanvas.toBlob(function(blob) {
-		var url = URL.createObjectURL(blob);
-
-	  image.src = url;
-	  image.className = "canvas-blob";
-
-	  image.style.width = "";
-	  image.style.height = "";
-
-	}, 'image/jpeg', compressionRatio);
+	return imgCanvas;
 }
 
+function canvasToBlob(canvas, {compressionRatio = 1}) {
+	return new Promise(function(resolve, reject) {
+		canvas.toBlob(function(blob) {
+			var url = URL.createObjectURL(blob);
+			var newImage = document.createElement("img");
+
+			newImage.src = url;
+			newImage.className = "canvas-blob";
+
+			document.body.appendChild(newImage);
+
+			resolve(newImage);
+		}, 'image/jpeg', compressionRatio);
+	})
+}
 
 function createDownloadLink(appendTo, url) {
 	appendTo = (appendTo === undefined) ? document.body : appendTo;
-	url 		 = (url === undefined) ? document.getElementsByTagName("img")[0].src : url;
+	url 		 = (url === undefined) ? document.querySelector(".canvas-blob").src : url;
 
 	var imageNumbers  = window.location.pathname.slice("/photo/".length);
 	imageNumbers			= imageNumbers.slice(0, imageNumbers.indexOf("/"));
@@ -317,22 +308,6 @@ function addInfoLine(options) {
 
 	return infoLine;
 }
-
-
-// Needs for remove event listeners
-function recreateNode(el, withChildren) {
-	if (!el) return; 
-
-  if (withChildren) {
-    el.parentNode.replaceChild(el.cloneNode(true), el);
-  }
-  else {
-    var newEl = el.cloneNode(false);
-    while (el.hasChildNodes()) newEl.appendChild(el.firstChild);
-    el.parentNode.replaceChild(newEl, el);
-  }
-}
-
 
 function preventDisableContextMenu() {
 	window.addEventListener("contextmenu", function (event) {

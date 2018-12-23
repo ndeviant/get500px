@@ -41,7 +41,7 @@
     color: #fff;
     letter-spacing: 0.05em;
     cursor: default;
-    opacity: .5;
+    opacity: .35;
     transition: all .3s;
 }
 
@@ -51,10 +51,9 @@
 
 .info-line-box {
     max-width: 1200px;
-    min-height: 40px;
     margin: 0 auto;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 9px;
+    padding-bottom: 11px;
     padding-left: 30px;
     padding-right: 30px;
     display: flex;
