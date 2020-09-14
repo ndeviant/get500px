@@ -1,7 +1,7 @@
 [class*="CopyrightTooltipContainer"] .photo_container__open_button {
 	position: absolute;
-	top: 24px;
-	right: 74px;
+	top: -8px;
+	right: 44px;
 	height: 40px;
 	width: 40px;
 	display: flex;
@@ -21,8 +21,8 @@
 }
 
 [class*="CopyrightTooltipContainer"] .photo_container__open_button svg {
-	height: 22px;
-	width: 22px;
+	height: 26px;
+	width: 26px;
 }
 
 /* Anauthorized fix line */

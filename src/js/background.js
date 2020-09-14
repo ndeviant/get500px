@@ -1,9 +1,8 @@
-import '../images/Get500px_16.png'
-import '../images/Get500px_32.png'
-import '../images/Get500px_64.png'
-import '../images/Get500px_128.png'
-import '../images/Get500px.png'
-
+import "../images/Get500px_16.png";
+import "../images/Get500px_32.png";
+import "../images/Get500px_64.png";
+import "../images/Get500px_128.png";
+import "../images/Get500px.png";
 
 function onExtensionClick(tab) {
 	function findImageSrc() {
@@ -17,13 +16,8 @@ function onExtensionClick(tab) {
 		const functionString = fnToString(findImageSrc);
 
 		chrome.tabs.executeScript(null, { code: functionString }, srcArg => {
-			let [src] = srcArg;
+			const [src] = srcArg;
 			console.log("onExtensionClick -> srcArg", srcArg);
-
-			// Save uncutted src
-			chrome.storage.local.set({ photoSrc: src });
-
-			src = src.slice(0, src.indexOf("?"));
 
 			chrome.tabs.create({
 				url: src,

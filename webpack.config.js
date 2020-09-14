@@ -68,8 +68,8 @@ var options = {
           version: process.env.npm_package_version,
           ...JSON.parse(content.toString())
         }))
-      }
-    }]),
+      },
+    }], { copyUnmodified: true }),
     new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "options.html"),
       filename: "options.html",
