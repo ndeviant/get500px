@@ -15,9 +15,8 @@ function onExtensionClick(tab) {
 		// Convert a function into a string
 		const functionString = fnToString(findImageSrc);
 
-		chrome.tabs.executeScript(null, { code: functionString }, srcArg => {
+		chrome.tabs.executeScript(null, { code: functionString }, (srcArg) => {
 			const [src] = srcArg;
-			console.log("onExtensionClick -> srcArg", srcArg);
 
 			chrome.tabs.create({
 				url: src,

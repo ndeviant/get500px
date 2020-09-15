@@ -8,6 +8,8 @@
 		return;
 	}
 
+	// addContextMenuEvent();
+
 	// Stop propogation on window, to prevent disable context
 	preventDisableContextMenu();
 
@@ -48,7 +50,7 @@
 				config: { attributes: true },
 
 				callback(mutationsList) {
-					mutationsList.forEach(mutation => {
+					mutationsList.forEach((mutation) => {
 						if (mutation.attributeName && mutation.attributeName === "src") {
 							addButton();
 						}
@@ -66,7 +68,6 @@
 function addButton() {
 	// Find photo in the DOM
 	const photoContainer = document.querySelector("#copyrightTooltipContainer");
-	const photoItself = photoContainer.querySelector(".photo-show__img");
 	const overlay = photoContainer.querySelector(
 		'[class*="Elements__PhotoUIWrapper"]',
 	);
@@ -95,15 +96,11 @@ function addButton() {
 	overlay.prepend(openButton);
 
 	// Add click function
-	openButton.addEventListener("click", () => {
-		const photoSrc = photoItself.src;
-
-		window.open(photoSrc, "_blank");
-	});
+	openButton.addEventListener("click", openImgInNewTab);
 }
 
 function onMutated(eventName, options) {
-	const promise = new Promise(resolve => {
+	const promise = new Promise((resolve) => {
 		const { targetNode, parentNode, callback } = options;
 
 		if (eventName === "changed") {
@@ -124,8 +121,8 @@ function onMutated(eventName, options) {
 			const searchBy = element[0] === "." ? "className" : "id";
 			element = element.slice(1);
 
-			const observerCallback = mutationsList => {
-				mutationsList.forEach(mutation => {
+			const observerCallback = (mutationsList) => {
+				mutationsList.forEach((mutation) => {
 					if (
 						mutation.addedNodes[0] &&
 						mutation.addedNodes[0][searchBy].indexOf(element) !== -1
@@ -144,10 +141,33 @@ function onMutated(eventName, options) {
 	return promise;
 }
 
+function getPhotoSrc() {
+	const photoEl = document.querySelector(
+		"#copyrightTooltipContainer .photo-show__img",
+	);
+	return photoEl.src;
+}
+
+function openImgInNewTab() {
+	const photoSrc = getPhotoSrc();
+
+	window.open(photoSrc, "_blank");
+}
+
+function addContextMenuEvent() {
+	const photoEl = document.querySelector(
+		"#copyrightTooltipContainer .photo-show__img",
+	);
+
+	photoEl.addEventListener("contextmenu", () => {
+		openImgInNewTab();
+	});
+}
+
 function preventDisableContextMenu() {
 	window.addEventListener(
 		"contextmenu",
-		event => {
+		(event) => {
 			event.stopPropagation();
 		},
 		true,
