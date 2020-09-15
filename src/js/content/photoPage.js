@@ -8,54 +8,61 @@
 		return;
 	}
 
-	// addContextMenuEvent();
-
 	// Stop propogation on window, to prevent disable context
-	preventDisableContextMenu();
+	// preventDisableContextMenu();
 
-	// Add the download button if we are on the photo page
-	const photoContainer = document.querySelector(
-		"[class*='Elements__PhotoUIWrapper']",
-	);
+	/**
+	 * Runs when photo is loaded.
+	 */
+	const main = () => {
+		addButton();
+		addContextMenuEvent();
+	};
 
-	if (photoContainer) {
-		onMutated("created", {
-			element: "#copyrightTooltipContainer",
-			parentNode: photoContainer,
-			callback() {
-				addButton();
+	/**
+	 * Runs when photo container created.
+	 */
+	const onPhotoContainerCreated = () => {
+		main();
+
+		// Recreate the button, when src of photo is changed
+		const modalCont = document.querySelector("#copyrightTooltipContainer");
+		const photo = modalCont.querySelector(".photo-show__img");
+
+		onMutated("changed", {
+			targetNode: photo,
+			config: { attributes: true },
+
+			callback(mutationsList) {
+				mutationsList.forEach((mutation) => {
+					if (mutation.attributeName && mutation.attributeName === "src") {
+						main();
+					}
+				});
 			},
 		});
-	}
+	};
 
+	// Add the download button if we are on the photo page
 	const reactRoot = document.querySelector("#root");
-	if (!reactRoot) {
-		return;
+	if (reactRoot) {
+		// On created DOMTree, add button
+		onMutated("created", {
+			element: "#copyrightTooltipContainer",
+			parentNode: reactRoot,
+			callback: onPhotoContainerCreated,
+		});
 	}
 
 	// On created modal, add button
 	onMutated("created", {
-		element: "#copyrightTooltipContainer",
-		parentNode: reactRoot,
-
+		element: "#pxLightbox-1",
+		parentNode: document.body,
 		callback() {
-			addButton();
-
-			// Recreate the button, when src of photo is changed
-			const modalCont = document.querySelector("#copyrightTooltipContainer");
-			const photo = modalCont.querySelector(".photo-show__img");
-
-			onMutated("changed", {
-				targetNode: photo,
-				config: { attributes: true },
-
-				callback(mutationsList) {
-					mutationsList.forEach((mutation) => {
-						if (mutation.attributeName && mutation.attributeName === "src") {
-							addButton();
-						}
-					});
-				},
+			onMutated("created", {
+				element: "#copyrightTooltipContainer",
+				parentNode: document.querySelector(".react_photos_index_container"),
+				callback: onPhotoContainerCreated,
 			});
 		},
 	});
@@ -155,21 +162,17 @@ function openImgInNewTab() {
 }
 
 function addContextMenuEvent() {
-	const photoEl = document.querySelector(
-		"#copyrightTooltipContainer .photo-show__img",
-	);
+	const photoContainer = document.querySelector("#copyrightTooltipContainer");
 
-	photoEl.addEventListener("contextmenu", () => {
-		openImgInNewTab();
-	});
+	photoContainer.addEventListener("contextmenu", openImgInNewTab);
 }
 
-function preventDisableContextMenu() {
-	window.addEventListener(
-		"contextmenu",
-		(event) => {
-			event.stopPropagation();
-		},
-		true,
-	);
-}
+// function preventDisableContextMenu() {
+// 	window.addEventListener(
+// 		"contextmenu",
+// 		(event) => {
+// 			event.stopPropagation();
+// 		},
+// 		true,
+// 	);
+// }
